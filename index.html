@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kafe Menüsü</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .menu-item { background: #f5f5f5; padding: 15px; margin: 10px; border-radius: 8px; }
+        .kategori { color: #2c3e50; font-size: 24px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <h1>☕ Kafe Menüsü</h1>
+    <div id="menu"></div>
+
+    <script>
+        // JSON dosyasını çek ve menüyü oluştur
+        fetch('https://raw.githubusercontent.com/kullaniciadiniz/menu-repo/main/menu.json')
+            .then(response => response.json())
+            .then(urunler => {
+                let html = '';
+                const kategoriler = [...new Set(urunler.map(u => u.Kategori))];
+                
+                kategoriler.forEach(kategori => {
+                    html += `<h2 class="kategori">${kategori}</h2>`;
+                    urunler.filter(u => u.Kategori === kategori).forEach(urun => {
+                        html += `
+                            <div class="menu-item">
+                                <h3>${urun.Ad}</h3>
+                                <p>${urun.Fiyat} TL</p>
+                            </div>
+                        `;
+                    });
+                });
+                
+                document.getElementById('menu').innerHTML = html;
+            })
+            .catch(error => console.error('Hata:', error));
+    </script>
+</body>
+</html>
